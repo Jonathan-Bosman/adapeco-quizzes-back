@@ -131,6 +131,15 @@ router.post('/create', async (req, res) => {
  *             schema:
  *               type: object
  *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 25
+ *                 firstname:
+ *                   type: string
+ *                   example: 'aaa'
+ *                 lastname:
+ *                   type: string
+ *                   example: 'aaa'
  *                 token:
  *                   type: string
  *                   example: 'very.long.gibberish'
@@ -157,8 +166,9 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({message: 'E-mail ou mot de passe incorrect.'});
         }
 
-        const token = jwt.sign({id : user.id, role : user.role}, process.env.PRIVATE_KEY, {expiresIn: '1h'});
-        return res.status(200).json({token: token});
+        const {id, firstname, lastname} = user;
+        const token = jwt.sign({id : user.id, role : user.role}, process.env.PRIVATE_KEY, {expiresIn: '1d'});
+        return res.status(200).json({id: id, firstname: firstname, lastname: lastname, token: token});
     });
 });
 
@@ -303,13 +313,15 @@ router.delete('/delete/:id', async (req, res) => {
  *                     type: string
  *                     example: 'user'
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', authorizationJWT, (req, res) => {
     const { id } = req.params;
     const sql = 'SELECT * FROM users WHERE id = ?';
     db.query(sql, [id], (err, results) => {
         if(err){
             return res.status(500).send(err);
         }
+        // console.log(res.req.user); // pour récupérer les infos du token
+        // results[0].cred = res.req.user; // les ajouter dand le return
         return res.status(200).json(results);
     });
 });

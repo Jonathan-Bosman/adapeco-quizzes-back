@@ -17,4 +17,4 @@ const authorizationJWT = (req, res, next) => {
     })
 }
 
-module.exports = { authorizationJWT }
+module.exports = authorizationJWT;

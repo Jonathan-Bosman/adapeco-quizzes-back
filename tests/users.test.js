@@ -9,7 +9,32 @@ const app = express();
 app.use('/', usersRoutes);
 app.use(bodyParser.json());
 app.use('/api/users', usersRoutes);
+// Mocker la BDD, sinon les modifications seront faites en BDD
 
+//prendre exemple sur le code du formateur :
+// describe('POST /users/login', () => {
+//     it('should login user and return a token', async () => {
+//       const loginUser = { username: 'user1', password: 'password123' };
+//       const hashedPassword = 'hashedPassword';
+//       const mockUser = { id: 1, username: 'user1', password: hashedPassword, role: 'user' };
+  
+//       const bcrypt = require('bcrypt');
+//       bcrypt.compare.mockResolvedValue(true);
+  
+//       db.query.mockImplementation((sql, values, callback) => {
+//         callback(null, [mockUser]);
+//       });
+  
+//       const jwt = require('jsonwebtoken');
+//       jwt.sign.mockReturnValue('fakeToken');
+  
+//       const response = await request(app)
+//         .post('/login')
+//         .send(loginUser);
+  
+//       expect(response.statusCode).toBe(200);
+//       expect(response.body.token).toBe('fakeToken');
+//     });
 db.connect((err) => {
     if (err) console.log(err);
 });
