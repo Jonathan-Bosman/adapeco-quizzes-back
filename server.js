@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const db = require('./modules/database.js');
 const usersRoutes = require('./routes/users.js');
 const quizzesRoutes = require('./routes/quizzes.js');
+const questionsRoutes = require('./routes/questions.js');
 const cors = require('cors');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -33,6 +34,7 @@ app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(bodyParser.json());
 app.use('/api/users', usersRoutes);
 app.use('/api/quizzes', quizzesRoutes);
+app.use('/api/questions', questionsRoutes);
 
 db.connect((err) => {
     if (err) {console.log(err);}

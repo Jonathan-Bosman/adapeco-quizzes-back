@@ -43,7 +43,7 @@ router.get('/', (req, res) => {
     const sql = 'SELECT * FROM users';
     db.query(sql, (err, results) => {
         if(err){
-            return res.status(500).send(err);
+            return res.status(500).json({ error: 'Erreur serveur', details: err });
         }
         return res.status(200).json(results);
     });
@@ -95,7 +95,7 @@ router.post('/create', async (req, res) => {
         db.query(sql, [firstname, lastname, email, hashedPass, role], (err, results) => {
             if (err) {
                 console.error('Erreur SQL :', err);
-                return res.status(500).send(err);
+                return res.status(500).json({ error: 'Erreur serveur', details: err });
             }
             return res.status(200).send({ message: 'Utilisateur/trice créé/e avec succès', name: firstname });
         });
@@ -151,7 +151,7 @@ router.post('/login', async (req, res) => {
     db.query(sql, [email], async (err, results) => {
         if(err){
             console.error('Erreur de requête à la base de donnée.');
-            return res.status(500).send(err);
+            return res.status(500).json({ error: 'Erreur serveur', details: err });
         }
         if(results.length<1){
             console.log('Aucun utilisateur avec l\'e-mail ', email, '.');
@@ -228,7 +228,7 @@ router.put('/update/:id', async (req, res) => {
     db.query(sql, [firstname, lastname, email, hashedPass, role, id], (err, results) => {
         if(err){
             console.error('Erreur de requête à la base de donnée.');
-            return res.status(500).send(err);
+            return res.status(500).json({ error: 'Erreur serveur', details: err });
         }
         return res.status(200).json({message: 'Utilisateur/trice modifié/e'});
     });
@@ -266,7 +266,7 @@ router.delete('/delete/:id', async (req, res) => {
     db.query(sql, [id], (err, results) => {
         if(err){
             console.error('Erreur de requête à la base de donnée.');
-            return res.status(500).send(err);
+            return res.status(500).json({ error: 'Erreur serveur', details: err });
         }
         return res.status(200).json({message: 'Utilisateur/trice éffacé/e'});
     });
@@ -318,7 +318,7 @@ router.get('/:id', authorizationJWT, (req, res) => {
     const sql = 'SELECT * FROM users WHERE id = ?';
     db.query(sql, [id], (err, results) => {
         if(err){
-            return res.status(500).send(err);
+            return res.status(500).json({ error: 'Erreur serveur', details: err });
         }
         // console.log(res.req.user); // pour récupérer les infos du token
         // results[0].cred = res.req.user; // les ajouter dand le return
